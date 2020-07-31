@@ -21,6 +21,10 @@ phases:
       # check for bash
       - bash --version
 
+      # show Flutter env variables
+      - set | grep FLUTTER
+      - set | grep flutter
+
       # env
       #- env
       #- whoami
@@ -28,20 +32,23 @@ phases:
       - echo "DEVICEFARM_APP_PATH=$DEVICEFARM_APP_PATH"
 
       # install flutter
-      - echo "Install flutter"
-      - FLUTTER_VERSION='v1.12.13+hotfix.8-stable'
+      - FLUTTER_CHANNEL='dev' # stable | beta | dev
+      - FLUTTER_VERSION='1.21.0-1.0.pre'
+      - echo "Install Flutter"
+      - echo " > '$FLUTTER_CHANNEL' channel"
+      - echo " > '$FLUTTER_VERSION' version"
       - >-
         if [ $DEVICEFARM_DEVICE_PLATFORM_NAME = "Android" ];
         then
             # Install Flutter
-            curl https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_$FLUTTER_VERSION.tar.xz -o flutter_linux.tar.xz
+            curl https://storage.googleapis.com/flutter_infra/releases/$FLUTTER_CHANNEL/linux/flutter_linux_$FLUTTER_VERSION.tar.xz -o flutter_linux.tar.xz
             tar xf flutter_linux.tar.xz
         fi
 
         if [ $DEVICEFARM_DEVICE_PLATFORM_NAME = "iOS" ];
         then
             # Install Flutter
-            curl https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_$FLUTTER_VERSION.zip -o flutter_macos.zip
+            curl https://storage.googleapis.com/flutter_infra/releases/$FLUTTER_CHANNEL/macos/flutter_macos_$FLUTTER_VERSION.zip -o flutter_macos.zip
             unzip -qq flutter_macos.zip
         fi
 
